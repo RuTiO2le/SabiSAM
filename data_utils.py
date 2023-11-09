@@ -334,7 +334,7 @@ class IDRID_Dataset(Dataset):
         return img, label, label_segmask_no, label_text
 
 class Ultrasound_Dataset(Dataset):
-    def __init__(self, config, is_train=False, apply_norm=True, shuffle_list=True, no_text_mode=False):
+    def __init__(self, config, is_train=False, apply_norm=True, shuffle_list=True, no_text_mode=True):
         super().__init__()
         self.root_path = config['data']['root_path']
         self.img_names = []
@@ -434,7 +434,7 @@ class Ultrasound_Dataset(Dataset):
 
 
 class Cholec_Ins_Dataset(Dataset):
-    def __init__(self, config, is_train=False, apply_norm=True, shuffle_list=True, no_text_mode=False) -> None:
+    def __init__(self, config, is_train=False, apply_norm=True, shuffle_list=True, no_text_mode=True) -> None:
         super().__init__()
         self.root_path = config['data']['root_path']
         self.img_names = []
@@ -464,9 +464,9 @@ class Cholec_Ins_Dataset(Dataset):
         self.num_classes = len(list(self.label_dict.keys()))
 
         if is_train:
-            self.folder_list = ['video01','video09','video12','video17','video18','video20','video24','video25', 'video26']
+            self.folder_list = ['Train']
         else:
-            self.folder_list = ['video27','video28']
+            self.folder_list = ['Train']
         #populate the above lists
         self.populate_lists()
         if shuffle_list:
@@ -478,28 +478,18 @@ class Cholec_Ins_Dataset(Dataset):
             self.label_list = [self.label_list[pi] for pi in p]
 
     def populate_lists(self):
+        path2 = os.path.join(self.root_path, 'mask_512')
         for folder in (self.folder_list):
-            path1 = os.path.join(self.root_path, folder)
-            for sub in sorted(os.listdir(path1)):
-                path2 = os.path.join(path1, sub)
-                for im in sorted(os.listdir(path2)):
-                    if 'endo.png' not in im:
-                        continue
-                    im_path = os.path.join(path2, im)
-                    im_name = im[:-4]
-                    label_img_path = os.path.join(path2, im_name+'_watershed_mask.png')
-                    if self.no_text_mode:
-                        self.img_names.append(im_name)
-                        self.img_path_list.append(os.path.join(im_path))
-                        self.label_path_list.append(os.path.join(label_img_path))
-                        self.label_list.append('')
-                    else:
-                        for label_name in self.label_names:
-                            self.img_names.append(im_name)
-                            self.img_path_list.append(im_path)
-                            self.label_path_list.append(label_img_path)
-                            self.label_list.append(label_name)
-    
+            path1 = os.path.join(self.root_path, 'images_512')
+            for im in sorted(os.listdir(path1)):
+                im_name = im[:-5]
+                im_path = os.path.join(path1, im)
+                label_img_path = os.path.join(path2, im_name+'.jpeg')
+                self.img_names.append(im_name)
+                self.img_path_list.append(os.path.join(im_path))
+                self.label_path_list.append(os.path.join(label_img_path))
+                self.label_list.append('')
+
     def __len__(self):
         return len(self.img_path_list)
 
@@ -547,7 +537,7 @@ class Cholec_Ins_Dataset(Dataset):
         return img, mask, self.img_path_list[index], label_of_interest
 
 class ChestXDet_Dataset(Dataset):
-    def __init__(self, config, start = 0, end = 69565, is_train=False, apply_norm=True, shuffle_list=True, no_text_mode=False) -> None:
+    def __init__(self, config, start = 0, end = 69565, is_train=False, apply_norm=True, shuffle_list=True, no_text_mode=True) -> None:
         super().__init__()
         self.root_path = config['data']['root_path']
         self.img_names = []
@@ -653,7 +643,7 @@ class ChestXDet_Dataset(Dataset):
 
 
 class Endovis_18(Dataset):
-    def __init__(self, config, start=0, end=200, is_train=False, shuffle_list = True, apply_norm=True, no_text_mode=False):
+    def __init__(self, config, start=0, end=200, is_train=False, shuffle_list = True, apply_norm=True, no_text_mode=True):
         super().__init__()
         self.root_path = config['data']['root_path']
         self.img_names = []
@@ -765,7 +755,7 @@ class Endovis_18(Dataset):
 
 
 class Endovis_Dataset(Dataset):
-    def __init__(self, config, start=0, end=200, is_train=False, shuffle_list = True, apply_norm=True, no_text_mode=False):
+    def __init__(self, config, start=0, end=200, is_train=False, shuffle_list = True, apply_norm=True, no_text_mode=True):
         super().__init__()
         self.root_path = config['data']['root_path']
         self.img_names = []
@@ -870,7 +860,7 @@ class Endovis_Dataset(Dataset):
     
 
 class KvasirSeg_Dataset(Dataset):
-    def __init__(self, config, is_train=False, shuffle_list = True, apply_norm=True, no_text_mode=False):
+    def __init__(self, config, is_train=False, shuffle_list = True, apply_norm=True, no_text_mode=True):
         super().__init__()
         self.root_path = config['data']['root_path']
         self.img_names = []
@@ -945,7 +935,7 @@ class KvasirSeg_Dataset(Dataset):
 
         return img, label, self.img_path_list[index], label_of_interest
 
-def get_data(config, tr_folder_start, tr_folder_end, val_folder_start, val_folder_end, use_norm=True, no_text_mode=False):
+def get_data(config, tr_folder_start, tr_folder_end, val_folder_start, val_folder_end, use_norm=True, no_text_mode=True):
     dataset_dict = {}
     dataloader_dict = {}
     dataset_sizes = {}

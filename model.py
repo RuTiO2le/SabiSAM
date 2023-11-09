@@ -84,7 +84,7 @@ class Prompt_Adapted_SAM(nn.Module):
             self.FDN_branch = FDN(norm_nc=256, input_nc=3, reduction_factor=4).to(device)
 
         #initialize sam with pretrained weights
-        sam_ckpt = '/home/ubuntu/Desktop/Domain_Adaptation_Project/repos/segment-anything/checkpoints/sam_vit_b_01ec64.pth'
+        sam_ckpt = '/content/drive/MyDrive/endovis17/ev17_textaffine_decoder_biastuning_blanklabels_focal.pth'
         # sam_ckpt = '/data/jparanj1/sam_vit_b_01ec64.pth'
         sam_state_dict = torch.load(sam_ckpt)
         for k in list(sam_state_dict.keys()):

@@ -1,7 +1,7 @@
 data_transforms:
   a_min: 0
-  a_max: 255
-  img_size: 256
+  a_max: 512
+  img_size: 512
   use_random_crop: False
   use_rotation: True
   rotation_angle: 10
@@ -12,7 +12,7 @@ data_transforms:
   use_horizontal_flip: False
 data:
   name: CHOLEC 8K
-  root_path: '/home/ubuntu/Desktop/Domain_Adaptation_Project/data/cholecSeg8k/archive'
-  label_list: [1,2,3,4,5,6,7,8,9,10,11,12]
-  label_names: ['Grasper', 'L Hook Electrocautery', 'Liver', 'Fat', 'Gall Bladder','Abdominal Wall','Gastrointestinal Tract','Cystic Duct','Blood','Hepatic Vein', 'Liver Ligament', 'Connective Tissue']
+  root_path: '/content/biastuning/Sabi/512x512/Train'
+  label_list: [1,2,3]
+  label_names: ['Fair', 'Poor', 'Severe']
   volume_channel: 2
